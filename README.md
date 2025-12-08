@@ -1,0 +1,2 @@
+# StrideCore
+embeddable tour widget
