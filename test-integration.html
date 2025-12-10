@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StrideCore Integration Test</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background: #f9fafb;
+    }
+    
+    .header {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    
+    h1 {
+      margin: 0 0 10px 0;
+      color: #111827;
+    }
+    
+    .subtitle {
+      color: #6b7280;
+      margin: 0;
+    }
+    
+    .test-section {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    
+    .test-section h2 {
+      margin-top: 0;
+      color: #374151;
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    
+    button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .btn-primary {
+      background: #4F46E5;
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: #4338CA;
+    }
+    
+    .btn-secondary {
+      background: #10B981;
+      color: white;
+    }
+    
+    .btn-secondary:hover {
+      background: #059669;
+    }
+    
+    .btn-tertiary {
+      background: #F59E0B;
+      color: white;
+    }
+    
+    .btn-tertiary:hover {
+      background: #D97706;
+    }
+    
+    .status {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      background: #F3F4F6;
+      font-family: monospace;
+      font-size: 14px;
+      white-space: pre-wrap;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    
+    .success {
+      background: #D1FAE5;
+      color: #065F46;
+    }
+    
+    .error {
+      background: #FEE2E2;
+      color: #991B1B;
+    }
+    
+    .info {
+      background: #DBEAFE;
+      color: #1E40AF;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🎯 StrideCore Integration Test</h1>
+    <p class="subtitle">Test your widget API and embed script</p>
+  </div>
+
+  <div class="test-section">
+    <h2>Test 1: API Connection</h2>
+    <p>Test if the StrideCore API is accessible and working correctly.</p>
+    <div class="button-group">
+      <button id="test-api" class="btn-primary">Test API Connection</button>
+      <button id="create-widget" class="btn-secondary">Create Test Widget</button>
+      <button id="fetch-widget" class="btn-tertiary">Fetch Widget</button>
+    </div>
+    <div id="api-status" class="status">Click a button to test the API...</div>
+  </div>
+
+  <div class="test-section">
+    <h2>Test 2: Embed Script (Method A - Inline Config)</h2>
+    <p>Test the embed script with inline configuration.</p>
+    <button id="signup-button" class="btn-primary">Sign Up Now</button>
+    <button id="features-button" class="btn-secondary">View Features</button>
+    <button id="pricing-button" class="btn-tertiary">See Pricing</button>
+    <div id="embed-status" class="status">Embed script will load automatically...</div>
+  </div>
+
+  <div class="test-section">
+    <h2>Test 3: Embed Script (Method B - Fetch from API)</h2>
+    <p>Test loading a widget configuration from the API.</p>
+    <div class="button-group">
+      <button id="load-from-api" class="btn-primary">Load Widget from API</button>
+    </div>
+    <div id="fetch-status" class="status">Click to load widget from API...</div>
+  </div>
+
+  <div class="test-section">
+    <h2>Console Output</h2>
+    <p>Check your browser console (F12) for detailed logs.</p>
+  </div>
+
+  <script>
+    const API_URL = 'http://localhost:3003';
+    let lastWidgetId = null;
+
+    // Test 1: API Connection
+    document.getElementById('test-api').addEventListener('click', async () => {
+      const status = document.getElementById('api-status');
+      status.className = 'status info';
+      status.textContent = 'Testing API connection...';
+      
+      try {
+        const response = await fetch(`${API_URL}/api/widgets`);
+        const data = await response.json();
+        
+        status.className = 'status success';
+        status.textContent = `✅ API Connected!\n\nResponse:\n${JSON.stringify(data, null, 2)}`;
+        console.log('API Test Success:', data);
+      } catch (error) {
+        status.className = 'status error';
+        status.textContent = `❌ API Connection Failed!\n\nError: ${error.message}\n\nMake sure StrideCore is running on http://localhost:3000`;
+        console.error('API Test Failed:', error);
+      }
+    });
+
+    // Test 2: Create Widget
+    document.getElementById('create-widget').addEventListener('click', async () => {
+      const status = document.getElementById('api-status');
+      status.className = 'status info';
+      status.textContent = 'Creating test widget...';
+      
+      const testWidget = {
+        tourId: 'test-tour-' + Date.now(),
+        name: 'Test Integration Tour',
+        steps: [
+          {
+            id: 'step-1',
+            target: '#signup-button',
+            title: 'Sign Up',
+            content: 'Click here to create your account',
+            position: 'bottom'
+          },
+          {
+            id: 'step-2',
+            target: '#features-button',
+            title: 'Features',
+            content: 'Explore our amazing features',
+            position: 'bottom'
+          },
+          {
+            id: 'step-3',
+            target: '#pricing-button',
+            title: 'Pricing',
+            content: 'Check out our pricing plans',
+            position: 'bottom'
+          }
+        ]
+      };
+      
+      try {
+        const response = await fetch(`${API_URL}/api/widgets`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(testWidget)
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          lastWidgetId = data.widgetId;
+          status.className = 'status success';
+          status.textContent = `✅ Widget Created!\n\nWidget ID: ${data.widgetId}\n\nResponse:\n${JSON.stringify(data, null, 2)}`;
+          console.log('Widget Created:', data);
+        } else {
+          throw new Error(data.error);
+        }
+      } catch (error) {
+        status.className = 'status error';
+        status.textContent = `❌ Failed to create widget!\n\nError: ${error.message}`;
+        console.error('Create Widget Failed:', error);
+      }
+    });
+
+    // Test 3: Fetch Widget
+    document.getElementById('fetch-widget').addEventListener('click', async () => {
+      const status = document.getElementById('api-status');
+      
+      if (!lastWidgetId) {
+        status.className = 'status error';
+        status.textContent = '❌ No widget ID available. Create a widget first!';
+        return;
+      }
+      
+      status.className = 'status info';
+      status.textContent = `Fetching widget ${lastWidgetId}...`;
+      
+      try {
+        const response = await fetch(`${API_URL}/api/widgets?id=${lastWidgetId}`);
+        const data = await response.json();
+        
+        if (data.success) {
+          status.className = 'status success';
+          status.textContent = `✅ Widget Fetched!\n\nResponse:\n${JSON.stringify(data, null, 2)}`;
+          console.log('Widget Fetched:', data);
+        } else {
+          throw new Error(data.error);
+        }
+      } catch (error) {
+        status.className = 'status error';
+        status.textContent = `❌ Failed to fetch widget!\n\nError: ${error.message}`;
+        console.error('Fetch Widget Failed:', error);
+      }
+    });
+
+    // Test 4: Load from API
+    document.getElementById('load-from-api').addEventListener('click', async () => {
+      const status = document.getElementById('fetch-status');
+      
+      if (!lastWidgetId) {
+        status.className = 'status error';
+        status.textContent = '❌ No widget ID available. Create a widget first in Test 1!';
+        return;
+      }
+      
+      status.className = 'status info';
+      status.textContent = `Loading widget ${lastWidgetId} via embed script...`;
+      
+      try {
+        // Create and inject the embed script with data-tour-id
+        const script = document.createElement('script');
+        script.src = `${API_URL}/embed.js`;
+        script.setAttribute('data-tour-id', lastWidgetId);
+        script.setAttribute('data-api-url', API_URL);
+        
+        script.onload = () => {
+          status.className = 'status success';
+          status.textContent = `✅ Embed script loaded!\n\nCheck for the tour button in the bottom-right corner.`;
+        };
+        
+        script.onerror = () => {
+          status.className = 'status error';
+          status.textContent = `❌ Failed to load embed script!`;
+        };
+        
+        document.body.appendChild(script);
+      } catch (error) {
+        status.className = 'status error';
+        status.textContent = `❌ Error: ${error.message}`;
+        console.error('Load from API Failed:', error);
+      }
+    });
+
+    // Auto-load embed script with inline config for Test 2
+    window.TourGuideConfig = {
+      tourId: 'inline-test-tour',
+      name: 'Inline Config Test Tour',
+      steps: [
+        {
+          id: 'step-1',
+          target: '#signup-button',
+          title: 'Sign Up Button',
+          content: 'This is the sign up button - your first step!',
+          position: 'bottom'
+        },
+        {
+          id: 'step-2',
+          target: '#features-button',
+          title: 'Features Button',
+          content: 'Click here to see all features',
+          position: 'bottom'
+        },
+        {
+          id: 'step-3',
+          target: '#pricing-button',
+          title: 'Pricing Button',
+          content: 'Check out our pricing options',
+          position: 'bottom'
+        }
+      ]
+    };
+
+    // Log that config is ready
+    console.log('TourGuideConfig set:', window.TourGuideConfig);
+    document.getElementById('embed-status').className = 'status success';
+    document.getElementById('embed-status').textContent = '✅ TourGuideConfig loaded!\n\nThe embed script will initialize automatically.\nLook for the tour button in the bottom-right corner.';
+  </script>
+
+  <!-- Load the embed script -->
+  <script src="http://localhost:3003/embed.js"></script>
+</body>
+</html>
