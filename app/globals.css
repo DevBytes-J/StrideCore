@@ -1,5 +1,132 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: #F5E6D3; /* Sand background */
+  color: #1A1A1A; /* Near black text */
+}
+
+h1 {
+  color: #D4AF37; /* Gold */
+  margin-bottom: 20px;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+/* Widget Styles */
+.stride-core-widget {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10000;
+}
+
+.stride-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(26, 26, 26, 0.8); /* Dark overlay */
+  pointer-events: all;
+  z-index: 10001;
+}
+
+.stride-spotlight {
+  position: absolute;
+  border: 3px solid #D4AF37; /* Gold border */
+  border-radius: 12px;
+  box-shadow: 0 0 0 9999px rgba(26, 26, 26, 0.8);
+  pointer-events: none;
+  z-index: 10002;
+}
+
+.stride-tooltip {
+  position: absolute;
+  background: #F5E6D3; /* Sand background */
+  border: 2px solid #D4AF37; /* Gold border */
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(26, 26, 26, 0.3);
+  max-width: 380px;
+  pointer-events: all;
+  z-index: 10003;
+}
+
+.stride-tooltip h3 {
+  margin: 0 0 12px 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1A1A1A; /* Black text */
+}
+
+.stride-tooltip p {
+  margin: 0 0 20px 0;
+  color: #4A4A4A; /* Dark gray */
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+.stride-tooltip-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stride-btn {
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.stride-btn-primary {
+  background: #D4AF37; /* Gold */
+  color: #1A1A1A; /* Black text */
+}
+
+.stride-btn-primary:hover {
+  background: #B8941F; /* Darker gold */
+  transform: translateY(-1px);
+}
+
+.stride-btn-secondary {
+  background: transparent;
+  color: #4A4A4A;
+  border: 2px solid #4A4A4A;
+}
+
+.stride-btn-secondary:hover {
+  background: #4A4A4A;
+  color: #F5E6D3;
+}
+
+.stride-progress {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.stride-progress-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #C4C4C4;
+  transition: all 0.3s ease;
+}
+
+.stride-progress-dot.active {
+  background: #D4AF37; /* Gold */
+  transform: scale(1.2);
 }
