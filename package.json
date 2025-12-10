@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "build:widget": "next build && node scripts/bundle-widget.js"
+    "dev": "node init && next dev",
+    "build": "node init && next build",
+    "start": "node init && next start",
+    "build:widget": "node init && next build && node scripts/bundle-widget.js"
   },
   "dependencies": {
     "framer-motion": "^10.18.0",
